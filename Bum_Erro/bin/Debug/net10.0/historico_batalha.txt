@@ -1,0 +1,7 @@
+=== LOG DE BATALHA RPG ===
+Data: 13/05/2026 19:50:36
+--------------------------
+O Guerreiro Arthur atacou o Dragão.
+O Dragão recebeu 40 de dano.
+O Dragão foi derrotado!
+--------------------------

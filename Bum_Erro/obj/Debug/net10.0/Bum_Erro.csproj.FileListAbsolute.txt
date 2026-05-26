@@ -1,0 +1,14 @@
+/home/cyberguigo/RiderProjects/Bum_Erro/Bum_Erro/bin/Debug/net10.0/Bum_Erro
+/home/cyberguigo/RiderProjects/Bum_Erro/Bum_Erro/bin/Debug/net10.0/Bum_Erro.deps.json
+/home/cyberguigo/RiderProjects/Bum_Erro/Bum_Erro/bin/Debug/net10.0/Bum_Erro.runtimeconfig.json
+/home/cyberguigo/RiderProjects/Bum_Erro/Bum_Erro/bin/Debug/net10.0/Bum_Erro.dll
+/home/cyberguigo/RiderProjects/Bum_Erro/Bum_Erro/bin/Debug/net10.0/Bum_Erro.pdb
+/home/cyberguigo/RiderProjects/Bum_Erro/Bum_Erro/obj/Debug/net10.0/Bum_Erro.GeneratedMSBuildEditorConfig.editorconfig
+/home/cyberguigo/RiderProjects/Bum_Erro/Bum_Erro/obj/Debug/net10.0/Bum_Erro.AssemblyInfoInputs.cache
+/home/cyberguigo/RiderProjects/Bum_Erro/Bum_Erro/obj/Debug/net10.0/Bum_Erro.AssemblyInfo.cs
+/home/cyberguigo/RiderProjects/Bum_Erro/Bum_Erro/obj/Debug/net10.0/Bum_Erro.csproj.CoreCompileInputs.cache
+/home/cyberguigo/RiderProjects/Bum_Erro/Bum_Erro/obj/Debug/net10.0/Bum_Erro.dll
+/home/cyberguigo/RiderProjects/Bum_Erro/Bum_Erro/obj/Debug/net10.0/refint/Bum_Erro.dll
+/home/cyberguigo/RiderProjects/Bum_Erro/Bum_Erro/obj/Debug/net10.0/Bum_Erro.pdb
+/home/cyberguigo/RiderProjects/Bum_Erro/Bum_Erro/obj/Debug/net10.0/Bum_Erro.genruntimeconfig.cache
+/home/cyberguigo/RiderProjects/Bum_Erro/Bum_Erro/obj/Debug/net10.0/ref/Bum_Erro.dll
