@@ -10,12 +10,12 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("Bum_Erro")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("Novo_Ats")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+58fde5ac72e93b4cbaf48daac1f0cd567511adfc")]
-[assembly: System.Reflection.AssemblyProductAttribute("Bum_Erro")]
-[assembly: System.Reflection.AssemblyTitleAttribute("Bum_Erro")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyProductAttribute("Novo_Ats")]
+[assembly: System.Reflection.AssemblyTitleAttribute("Novo_Ats")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 
 // Gerado pela classe WriteCodeFragment do MSBuild.

@@ -12,3 +12,4 @@
 /home/cyberguigo/RiderProjects/Bum_Erro/Bum_Erro/obj/Debug/net10.0/Bum_Erro.pdb
 /home/cyberguigo/RiderProjects/Bum_Erro/Bum_Erro/obj/Debug/net10.0/Bum_Erro.genruntimeconfig.cache
 /home/cyberguigo/RiderProjects/Bum_Erro/Bum_Erro/obj/Debug/net10.0/ref/Bum_Erro.dll
+/home/cyberguigo/RiderProjects/Bum_Erro/Bum_Erro/obj/Debug/net10.0/Bum_Erro.sourcelink.json

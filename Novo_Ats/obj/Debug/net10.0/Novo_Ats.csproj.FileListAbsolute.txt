@@ -1,0 +1,14 @@
+/home/cyberguigo/RiderProjects/Bum_Erro/Novo_Ats/bin/Debug/net10.0/Novo_Ats
+/home/cyberguigo/RiderProjects/Bum_Erro/Novo_Ats/bin/Debug/net10.0/Novo_Ats.deps.json
+/home/cyberguigo/RiderProjects/Bum_Erro/Novo_Ats/bin/Debug/net10.0/Novo_Ats.runtimeconfig.json
+/home/cyberguigo/RiderProjects/Bum_Erro/Novo_Ats/bin/Debug/net10.0/Novo_Ats.dll
+/home/cyberguigo/RiderProjects/Bum_Erro/Novo_Ats/bin/Debug/net10.0/Novo_Ats.pdb
+/home/cyberguigo/RiderProjects/Bum_Erro/Novo_Ats/obj/Debug/net10.0/Novo_Ats.GeneratedMSBuildEditorConfig.editorconfig
+/home/cyberguigo/RiderProjects/Bum_Erro/Novo_Ats/obj/Debug/net10.0/Novo_Ats.AssemblyInfoInputs.cache
+/home/cyberguigo/RiderProjects/Bum_Erro/Novo_Ats/obj/Debug/net10.0/Novo_Ats.AssemblyInfo.cs
+/home/cyberguigo/RiderProjects/Bum_Erro/Novo_Ats/obj/Debug/net10.0/Novo_Ats.csproj.CoreCompileInputs.cache
+/home/cyberguigo/RiderProjects/Bum_Erro/Novo_Ats/obj/Debug/net10.0/Novo_Ats.dll
+/home/cyberguigo/RiderProjects/Bum_Erro/Novo_Ats/obj/Debug/net10.0/refint/Novo_Ats.dll
+/home/cyberguigo/RiderProjects/Bum_Erro/Novo_Ats/obj/Debug/net10.0/Novo_Ats.pdb
+/home/cyberguigo/RiderProjects/Bum_Erro/Novo_Ats/obj/Debug/net10.0/Novo_Ats.genruntimeconfig.cache
+/home/cyberguigo/RiderProjects/Bum_Erro/Novo_Ats/obj/Debug/net10.0/ref/Novo_Ats.dll
