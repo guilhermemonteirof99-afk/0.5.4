@@ -19,6 +19,7 @@ class Program
 
         User_Pra_Tudo p = new User_Pra_Tudo();
         criptor criptografar = new criptor();
+        
         Console.WriteLine(" ola vamos criptografar ou descriptografar ? ,lembre esse sistema vai ser so pra arguivos ");
         Console.WriteLine(" opção [1] criptografar ");
         Console.WriteLine(" opção [2]  descriptografar ");
@@ -29,7 +30,7 @@ class Program
             {
 
                 Console.WriteLine(" escreva o nome e ponha em texto do arquivo que voce quer criptografar  ");
-                p.Interagir = Console.ReadLine().Trim().Replace(" ", "");
+                p.Interagir = Console.ReadLine().Trim().Replace("\"", "");
                 p.arquivo = p.Interagir;
                 Console.WriteLine(" carregando... ");
                 try
@@ -85,11 +86,63 @@ class Program
                 }
             }
             else if (p.opcoes == 2)
-            {
+            { 
+                Console.WriteLine(" agora o arquivo cifrado ");
+                p.Interagir = Console.ReadLine().Trim().Replace("\"", "");
+                p.arquivo = p.Interagir;
+                
+                Console.WriteLine(" para esse passo vamos precisar da sua chave secreta que foi gerada na hora da cifra ,para podermos descriptografar  ");
+                string guardakey = Console.ReadLine().Trim().Replace("\"", "");;
+                Console.WriteLine(" carregando... ");
+                try
+                {
 
+                    if (File.Exists(p.arquivo) && File.Exists(guardakey))
+                    {
+                        string[] chaves = File.ReadAllLines(guardakey);
+                        criptografar.carregarChave(chaves[0], chaves[1]);
+
+                        byte[] bytescifrados = File.ReadAllBytes(p.arquivo);
+                        byte[] arquivoDecifrado;
+
+                        arquivoDecifrado = criptografar.DesCriptografia_Pessoal_Modo_CBC(bytescifrados);
+
+                        string arquivoOriginal = p.arquivo.Replace(".trancado", "_RECUPERADO.txt");
+                        File.WriteAllBytes(arquivoOriginal, arquivoDecifrado);
+
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("susseso arquivo decifrado ");
+                        Console.WriteLine($"arquivo esta no {arquivoOriginal}");
+                        Console.ResetColor();
+                    }
+                }
+                catch (FileNotFoundException erro)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(erro.Message);
+                    Console.ResetColor();
+                }
+                catch (FileLoadException erro)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(erro.Message);
+                    Console.ResetColor();
+                }
+                catch(Exception erro)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(erro.Message);
+                    Console.ResetColor();
+                }
             }
         }
-        catch (FormatException erro)
+        catch(FormatException erro)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(erro.Message);
+            Console.ResetColor();
+        }
+        catch (Exception erro)
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(erro.Message);
