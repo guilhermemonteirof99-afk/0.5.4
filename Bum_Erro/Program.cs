@@ -30,8 +30,8 @@ class Program
             {
 
                 Console.WriteLine(" escreva o nome e ponha em texto do arquivo que voce quer criptografar  ");
-                p.Interagir = Console.ReadLine().Trim().Replace("\"", "");
-                p.arquivo = p.Interagir;
+                p.arquivo = Console.ReadLine().Trim().Replace("\"", "").Replace("'", "");
+               
                 Console.WriteLine(" carregando... ");
                 try
                 {
@@ -88,11 +88,11 @@ class Program
             else if (p.opcoes == 2)
             { 
                 Console.WriteLine(" agora o arquivo cifrado ");
-                p.Interagir = Console.ReadLine().Trim().Replace("\"", "");
-                p.arquivo = p.Interagir;
+                p.arquivo = Console.ReadLine().Trim().Replace("\"", "").Replace("'", "");
+                 
                 
                 Console.WriteLine(" para esse passo vamos precisar da sua chave secreta que foi gerada na hora da cifra ,para podermos descriptografar  ");
-                string guardakey = Console.ReadLine().Trim().Replace("\"", "");;
+                string guardakey = Console.ReadLine().Trim().Replace("\"", "").Replace("'", "");
                 Console.WriteLine(" carregando... ");
                 try
                 {

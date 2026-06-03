@@ -24,8 +24,6 @@ public class criptor
 
     };
     
-    private readonly int[] Pbox = new int[8] {4,3,6,0,1,7,2 ,5};
-    
     // A Tabela Oficial de Substituição Reversa do AES (Inverse S-Box)
     private readonly byte[] InvSbox = new byte[256] 
     { 
@@ -46,15 +44,46 @@ public class criptor
         0xa0, 0xe0, 0x3b, 0x4d, 0xae, 0x2a, 0xf5, 0xb0, 0xc8, 0xeb, 0xbb, 0x3c, 0x83, 0x53, 0x99, 0x61,
         0x17, 0x2b, 0x04, 0x7e, 0xba, 0x77, 0xd6, 0x26, 0xe1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0c, 0x7d
     };
-    // A Tabela de Permutação Reversa (Desfaz a dança das cadeiras do seu Pbox original)
-    private readonly int[] InvPbox = new int[8] { 3, 4, 6, 1, 0, 7, 2, 5 };
+    
+    // DIFUSÃO: Mapa do Gato de Arnold (Transformação 2D em 1D)
+    
+    private byte[] ArnoldCatMap(byte[] bloco)
+    {
+        byte[] resultado = new byte[16];
+        for (int y = 0; y < 4; y++)
+        {
+            for (int x = 0; x < 4; x++)
+            {
+                int novoX = (x + y) % 4;
+                int novoY = (x + 2 * y) % 4;
+                resultado[novoY * 4 + novoX] = bloco[y * 4 + x];
+            }
+        }
+        return resultado;
+    }
+
+    private byte[] InvArnoldCatMap(byte[] bloco)
+    {
+        byte[] resultado = new byte[16];
+        for (int y = 0; y < 4; y++)
+        {
+            for (int x = 0; x < 4; x++)
+            {
+                // Fórmula reversa de Arnold com tratamento para números negativos em módulo
+                int oldX = ((2 * x - y) % 4 + 4) % 4;
+                int oldY = ((-x + y) % 4 + 4) % 4;
+                resultado[y * 4 + x] = bloco[oldY * 4 + oldX];
+            }
+        }
+        return resultado;
+    }
     
     public byte[] chave { private set; get; }
     public byte[] IV { get; private set; }
     
     public criptor()
     {
-        IV=new byte[8];
+        IV=new byte[16];
         chave=new byte[16];
         
     }
@@ -69,10 +98,10 @@ public class criptor
     public byte[] AplicarPadding(byte[] arquivoOriginal)
     {
         
-        int sobra = arquivoOriginal.Length % 8;
+        int sobra = arquivoOriginal.Length % 16;
     
         
-        byte bytesFaltando = (byte)(8 - sobra);
+        byte bytesFaltando = (byte)(16 - sobra);
 
         
         int novoTamanho = arquivoOriginal.Length + bytesFaltando;
@@ -129,100 +158,120 @@ public class criptor
         
         
         Array.Copy(chaveRecuperada, 0, chave, 0, 16);
-        Array.Copy(ivRecuperado, 0, IV, 0, 8); 
+        Array.Copy(ivRecuperado, 0, IV, 0, 16); 
     }
-    public byte[] Criptografia_Pessoal_Modo_CBC(byte[] arquivoOriginal )
+    
+    // KEY SCHEDULE: Gera 10 sub-chaves únicas a partir da chave mestre
+    
+    private byte[][] GerarSubChaves()
     {
-        byte[] arquivoPronto = AplicarPadding(arquivoOriginal);
-        byte[] arquivoSemSobra = new byte[arquivoPronto.Length];
-
-        byte[] PuxaVI = new byte[8];
-        Array.Copy(IV,PuxaVI,8);
-
-        int rodadas = 10;
-        
-        for (int i = 0; i < arquivoPronto.Length; i+=8)
+        byte[][] subchaves = new byte[10][];
+        for (int r = 0; r < 10; r++)
         {
-            byte[] blocoAtual = new byte[8];
-            Array.Copy(arquivoPronto, i, blocoAtual, 0, 8);
-            
-            for (int b = 0; b < 8; b++)
+            subchaves[r] = new byte[16];
+            for (int b = 0; b < 16; b++)
             {
-                blocoAtual[b] = (byte)(blocoAtual[b] ^ PuxaVI[b]);
+                // Matemática de expansão: rotaciona a chave e aplica XOR com o número do round
+                subchaves[r][b] = (byte)(chave[(b + r) % 16] ^ (r + 1));
+            }
+        }
+        return subchaves;
+    }
+    
+    
+    public byte[] Criptografia_Pessoal_Modo_CBC(byte[] arquivoOriginal)
+    {
+        byte[] arquivoPronto = AplicarPadding(arquivoOriginal); // Certifique-se que seu padding usa 16 como base agora!
+        byte[] arquivoCifrado = new byte[arquivoPronto.Length];
+        
+        byte[] vetorCorrente = new byte[16];
+        Array.Copy(IV, vetorCorrente, 16);
+
+        byte[][] subchaves = GerarSubChaves(); // Puxa as 10 chaves exclusivas
+        int rodadas = 10;
+
+        // Caminhando de 16 em 16 bytes
+        for (int i = 0; i < arquivoPronto.Length; i += 16)
+        {
+            byte[] blocoAtual = new byte[16];
+            Array.Copy(arquivoPronto, i, blocoAtual, 0, 16);
+
+            // CBC: XOR com o bloco anterior (ou IV)
+            for (int b = 0; b < 16; b++)
+            {
+                blocoAtual[b] = (byte)(blocoAtual[b] ^ vetorCorrente[b]);
             }
 
+            // === A MÁQUINA DE CRIPTOGRAFIA ===
             for (int r = 0; r < rodadas; r++)
             {
-                
-                //fechadura com XOR + a Chave 
-                for (int b = 0; b < 8; b++)
+                // 1. AddRoundKey (Com a Sub-chave exclusiva da rodada!)
+                for (int b = 0; b < 16; b++)
                 {
-                    blocoAtual[b] = (byte)(blocoAtual[b]^chave[b % chave.Length]);
+                    blocoAtual[b] = (byte)(blocoAtual[b] ^ subchaves[r][b]);
                 }
-                
-                // Confusão S-Box 
-                for (int b = 0; b < 8; b++)
+
+                // 2. S-Box (Confusão)
+                for (int b = 0; b < 16; b++)
                 {
                     blocoAtual[b] = Sbox[blocoAtual[b]];
                 }
-                 // Difusão P-Box
-                byte[] blocoDifuso = new byte[8];
-                for (int b = 0; b < 8; b++)
-                {
-                    blocoDifuso[b] = blocoAtual[Pbox[b]];
-                }
-                Array.Copy(blocoDifuso,0, blocoAtual,0,8);
+
+                // 3. Arnold's Cat Map (Difusão Caótica)
+                blocoAtual = ArnoldCatMap(blocoAtual);
             }
-            Array.Copy(blocoAtual,0,PuxaVI,0,8);
-            Array.Copy(blocoAtual,0,arquivoSemSobra,i,8);
+
+            Array.Copy(blocoAtual, 0, arquivoCifrado, i, 16);
+            Array.Copy(blocoAtual, 0, vetorCorrente, 0, 16); // Atualiza a corrente CBC
         }
-        return arquivoSemSobra; 
+        return arquivoCifrado;
     }
     public byte[] DesCriptografia_Pessoal_Modo_CBC(byte[] arquivocifra)
     {
-        byte[] arquivoProntoDestrancado =new byte[arquivocifra.Length];
+        byte[] arquivoProntoDestrancado = new byte[arquivocifra.Length];
         
-        byte[] PuxaVI = new byte[8];
-        Array.Copy(IV,PuxaVI,8);
+        byte[] PuxaVI = new byte[16];
+        Array.Copy(IV, PuxaVI, 16);
 
+        byte[][] subchaves = GerarSubChaves();
         int rodadas = 10;
         
-        for (int i = 0; i < arquivocifra.Length; i+=8)
+        for (int i = 0; i < arquivocifra.Length; i += 16)
         {
-            byte[] blocoAtual = new byte[8];
-            Array.Copy(arquivocifra, i, blocoAtual, 0, 8);
+            byte[] blocoAtual = new byte[16];
+            Array.Copy(arquivocifra, i, blocoAtual, 0, 16);
             
-            byte[] proximovetor=new byte[8];
-            Array.Copy(blocoAtual,proximovetor, 8);
+            byte[] proximovetor = new byte[16];
+            Array.Copy(blocoAtual, proximovetor, 16);
             
-            for (int r = 0; r < rodadas; r++)
+            // === MÁQUINA DO TEMPO REVERSA ===
+            // Como estamos voltando no tempo, a rodada 9 é a primeira a ser desfeita, até a 0
+            for (int r = rodadas - 1; r >= 0; r--)
             {
-                // inDifusão P-Box
-                byte[] blocoDESDifuso = new byte[8];
-                for(int b = 0;b < 8;b++)
-                {
-                    blocoDESDifuso[b] = blocoAtual[InvPbox[b]];
-                }
-                Array.Copy(blocoDESDifuso,0,blocoAtual,0,8);
+                // 1º: Desfaz o Caos de Arnold
+                blocoAtual = InvArnoldCatMap(blocoAtual);
                 
-                // inConfusão S-Box 
-                for (int b = 0; b < 8; b++)
+                // 2º: Desfaz a S-Box
+                for (int b = 0; b < 16; b++)
                 {
                     blocoAtual[b] = InvSbox[blocoAtual[b]];
                 }
-                //destrancando  com XOR + a Chave 
-                for (int b = 0; b < 8; b++)
+
+                // 3º: Desfaz a Fechadura (Com a Sub-chave da respectiva rodada!)
+                for (int b = 0; b < 16; b++)
                 {
-                    blocoAtual[b] = (byte)(blocoAtual[b]^chave[b % chave.Length]);
+                    blocoAtual[b] = (byte)(blocoAtual[b] ^ subchaves[r][b]);
                 }
             }
 
-            for (int b = 0; b < 8 ; b++)
+            // Desfaz a corrente do CBC
+            for (int b = 0; b < 16; b++)
             {
                 blocoAtual[b] = (byte)(blocoAtual[b] ^ PuxaVI[b]);
             }
-            Array.Copy(blocoAtual,0,arquivoProntoDestrancado,i,8);
-            Array.Copy(proximovetor,0,PuxaVI,0,8);
+            
+            Array.Copy(blocoAtual, 0, arquivoProntoDestrancado, i, 16);
+            Array.Copy(proximovetor, 0, PuxaVI, 0, 16);
         }
         return RemoverPadding(arquivoProntoDestrancado); 
     }
