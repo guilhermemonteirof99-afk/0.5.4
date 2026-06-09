@@ -106,14 +106,26 @@ class Program
                         byte[] arquivoDecifrado;
 
                         arquivoDecifrado = criptografar.DesCriptografia_Pessoal_Modo_CBC(bytescifrados);
+                        
+                        
+                       string nomeSemTrancado = p.arquivo.Replace(".trancado", "");
+                       string diretorio = Path.GetDirectoryName(nomeSemTrancado) ?? "";
+                       string nomeBase = Path.GetFileNameWithoutExtension(nomeSemTrancado);
+                       string extensao = Path.GetExtension(nomeSemTrancado);
+                        
+                       string arquivoOriginal = Path.Combine(diretorio, $"{nomeBase}_RECUPERADO{extensao}");
+                       File.WriteAllBytes(arquivoOriginal, arquivoDecifrado);
 
-                        string arquivoOriginal = p.arquivo.Replace(".trancado", "_RECUPERADO.txt");
-                        File.WriteAllBytes(arquivoOriginal, arquivoDecifrado);
+                       //  MELHORIA PONTO 3: Higiene de Memória (Zeroization) 
+                       Array.Clear(bytescifrados, 0, bytescifrados.Length);
+                       Array.Clear(arquivoDecifrado, 0, arquivoDecifrado.Length);
 
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine("susseso arquivo decifrado ");
-                        Console.WriteLine($"arquivo esta no {arquivoOriginal}");
-                        Console.ResetColor();
+                       Console.ForegroundColor = ConsoleColor.Cyan;
+                       Console.WriteLine("\n Sucesso! Arquivo decifrado com segurança.");
+                       Console.WriteLine($" O arquivo recuperado está salvo em: {arquivoOriginal}");
+                       Console.ResetColor();
+                       
+                       
                     }
                 }
                 catch (FileNotFoundException erro)

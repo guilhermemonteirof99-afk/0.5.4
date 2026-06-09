@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Bum_Erro")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+959bd5b73754c1fe99922e63caaac67fd82d0cc6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ce345c0ba4b4ba81ddcd6ad40d204e27712bab72")]
 [assembly: System.Reflection.AssemblyProductAttribute("Bum_Erro")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Bum_Erro")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
